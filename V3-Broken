@@ -92,7 +92,7 @@ class ACM:
                  break
           
         for k in range (len(ACM.grid)):
-            print("ACM.GRID[K]:",ACM.grid[k]) 
+            print("ACM.grid[k]",ACM.grid[k]) 
     '''def delRight(window, subName, objName, right):
         subI = 0 #subject index
         objI = 0 #object index
@@ -161,12 +161,12 @@ def main():
         printSub = Label(window, text = ACM.subjects[i].text)
         printSub.grid(row = ACM.subjects[i].row, column = ACM.subjects[i].column)
    
-         
+    '''     
     for i in range(ACM.counter):
         print("ACM.GRID IN MAIN FUNCTION: ",ACM.grid)
-        printRight = Label(window, text = ACM.grid[i])
+        printRight = Label(window, text = ACM.grid)
         printRight.grid(row = ACM.rights[i].row, column = ACM.rights[i].column)
-
+    '''
         
     #ACM.delRight(window, "Sub1", "Obj1", "control")
     #ACM.delRight(window, "Sub1", "Obj1", "write")
