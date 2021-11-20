@@ -2,10 +2,7 @@
 ACM CLASS
 
     transfer
-    #grant
     read
-    #create object
-    #create subject
     delete object
     delete subject
     delete right
@@ -27,18 +24,13 @@ class LabelACM:
         self.column = column
         self.rights = []
         
+        
 
 class ACM:
 
     subjects = [] #list of subjects that are created
     objects = [] #list  of objects that are created
     rights = [] #list of rights that are created
-
-
-    grid = [] #stores subject,object, and roles together
-    counter =0 # counts how many times function is run
-    row =0
-    column =0
     
 
     def createObj(objName):  #takes window and object name to create new object onto window
@@ -47,53 +39,81 @@ class ACM:
         ACM.objects.append(newObject) #add object to object list
         
     def createSub(subName): #takes window and subject name to create new subject onto window
-        newSubject = LabelACM(subName, subName, len(ACM.objects)+1, 0)
+        ''' CHECK IF SUBJECT ALREADY EXISTS'''
+        newSubject = LabelACM(subName, subName, len(ACM.subjects)+1, 0)
         ACM.subjects.append(newSubject) #add object to object list
         ACM.createObj(subName)
 
+    def initRules():
+
+        for i in range(len(ACM.subjects)):
+            for j in range(len(ACM.objects)):
+                newRight = LabelACM(ACM.subjects[i].name + ACM.objects[j].name, ACM.subjects[i].name + ACM.objects[j].name, ACM.subjects[i].row, ACM.objects[j].column)
+                ACM.rights.append(newRight)
+                print(newRight.name + ": " + str(newRight.row) + " " + str(newRight.column)) 
+        
     def grant(subName, objName, right): #grants subject right to object based on subject, object, and desired right
         subI = 0 #subject index
         objI = 0 #object index
-    
+
         for i in range(len(ACM.subjects)): #finds index of subject
             if ACM.subjects[i].name == subName:
-                subI = ACM.subjects[i].row
-
-                LabelACM.row =subI
-                
+                subI = ACM.subjects[i].name
                 break
 
         for j in range(len(ACM.objects)): #finds index of object
             if ACM.objects[j].name ==  objName:
-                objI = ACM.objects[j].column
-                LabelACM.column = objI
-                
-                break
-            
-        print("current subI,obi: ",subI,objI) #prints current subject and object index
-        row = str(subI)
-        column = str(objI)
-        role = right
-        allThree = (subName,objName, role) # combines all three values 
-        allThree = [allThree]
-        ACM.counter += 1  
-
-      
-        print("COUTER:",ACM.counter)
-        for i in range (ACM.counter): 
-            if (allThree not in ACM.grid):
-                print(allThree,"All three values do not exist in ACM.grid:")
-                ACM.grid.append(allThree)
-                print("APPENDING ALL THREE TO ACM.grid[i]: ",ACM.grid)
+                objI = ACM.objects[j].name
                 break
 
-            else:
-                 print(allThree,"ALREADY exist:")
+        #print(subName, objName, right, str(subI), str(objI))
+   
+        for k in range(len(ACM.rights)):   
+            if ACM.rights[k].name == subI + objI:
+                if right not in ACM.rights[k].rights:
+                    ACM.rights[k].rights.append(right)
+                    print("if: " +  ACM.rights[k].text + " " + str(ACM.rights[k].rights))
+                    break
+    def delObj(objName):
+        for i in range(len(ACM.objects)):
+             if ACM.objects[i].text ==  objName: #if objname matches name in array 
+                objectCol = ACM.objects[i].column
+                print("OBJECT COL =",objectCol)
+                break
+                    
+
+
+        for k in range(len(ACM.rights)):
+            print("ACM.RIGHTS[K].column",ACM.rights[k].column) 
+            if ACM.rights[k].column == objectCol:
+                print("BEFORE: ACM.RIGHTS[K]",ACM.rights[k].name) 
+
+                del ACM.rights[k]
+                print("ACM.RIGHTS[K]",ACM.rights[k].name) 
+                break
+                #del ACM.rights[k]
+
+    
+        # loop objects array 
+        for i in range(len(ACM.objects)):
+             if ACM.objects[i].text ==  objName: #if objname matches name in array 
+                 del ACM.objects[i]
+                 print(ACM.rights[i].rights)
                  break
+                    
+
+
+
+              
+        
           
-        for k in range (len(ACM.grid)):
-            print("ACM.grid[k]",ACM.grid[k]) 
-    '''def delRight(window, subName, objName, right):
+                    
+                
+                
+                                   
+          
+    '''
+    def delRight(window, subName, objName, right):
         subI = 0 #subject index
         objI = 0 #object index
 
@@ -117,10 +137,7 @@ class ACM:
                     
 
 
-    def delObj(window, objName): 
-        for i in range(len(ACM.objects)):
-            if objName == ACM.objects[i].name:
-                ACM.objObj[i].destroy()'''
+'''
         
 def main():
     
@@ -133,24 +150,38 @@ def main():
 
     Button(window, text="Quit", command=close).grid(row=0, column=0)
     ACM.createObj("Obj1")
-    ACM.createSub("Sub1")
     ACM.createObj("Obj2")
-    ACM.createSub("Sub2")
-    ACM.createSub("Sub3")
     ACM.createObj("Obj3")
     ACM.createObj("Obj4")
+    ACM.createSub("Sub1")
+    print(ACM.subjects[0].name, str(ACM.subjects[0].row))
+    ACM.createSub("Sub2")
+    print(ACM.subjects[1].name, str(ACM.subjects[1].row))
+    ACM.createSub("Sub3")
+    print(ACM.subjects[2].name, str(ACM.subjects[2].row))
+
     
     #ACM.delObj(window, "Obj1")
+    ACM.initRules()
 
     ACM.grant("Sub2", "Obj3", "view")
     ACM.grant("Sub1", "Obj1", "own")
-    ACM.grant("Sub2", "Obj3", "view")
+    ACM.grant("Sub1", "Obj1", "control")
     ACM.grant("Sub1", "Obj1", "write")
     ACM.grant("Sub3", "Obj2", "own")
-    ACM.grant("Sub3", "Obj4", "read")
     ACM.grant("Sub3", "Obj2", "control")
     ACM.grant("Sub3", "Obj4", "read")
 
+    ACM.grant("Sub2", "Obj3", "view")
+    ACM.grant("Sub1", "Obj1", "own")
+    ACM.grant("Sub1", "Obj1", "control")
+    ACM.grant("Sub1", "Obj1", "write")
+    ACM.grant("Sub3", "Obj2", "own")
+    ACM.grant("Sub3", "Obj2", "control")
+    ACM.grant("Sub3", "Obj4", "read")
+
+    ACM.delObj("Obj1")
+    
 
 
     for i in range(len(ACM.objects)):
@@ -160,18 +191,18 @@ def main():
     for i in range(len(ACM.subjects)):
         printSub = Label(window, text = ACM.subjects[i].text)
         printSub.grid(row = ACM.subjects[i].row, column = ACM.subjects[i].column)
-   
-    '''     
-    for i in range(ACM.counter):
-        print("ACM.GRID IN MAIN FUNCTION: ",ACM.grid)
-        printRight = Label(window, text = ACM.grid)
+        
+    for i in range(len(ACM.rights)):
+        print("\nPrinting: "+ACM.rights[i].text + " " + str(ACM.rights[i].rights))
+        printRight = Label(window, text = ACM.rights[i].rights)
         printRight.grid(row = ACM.rights[i].row, column = ACM.rights[i].column)
-    '''
+
         
     #ACM.delRight(window, "Sub1", "Obj1", "control")
     #ACM.delRight(window, "Sub1", "Obj1", "write")
     #ACM.delRight(window, "Sub3", "Obj4", "read")'''
-    
+
+
 
     window.mainloop()
 
