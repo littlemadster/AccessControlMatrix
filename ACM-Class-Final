@@ -55,6 +55,8 @@ class ACM:
             for j in range(len(ACM.objects)):
                 newRight = LabelACM(ACM.subjects[i].name + ACM.objects[j].name, ACM.subjects[i].name + ACM.objects[j].name, ACM.subjects[i].row, ACM.objects[j].column)
                 ACM.rights.append(newRight)
+                ACM.grant(ACM.subjects[i].name,ACM.subjects[i].name,"control")
+
                # print(newRight.name + ": " + str(newRight.row) + " " + str(newRight.column)) 
         
     def grant(subName, objName, right): #grants subject right to object based on subject, object, and desired right
