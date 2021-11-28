@@ -132,10 +132,44 @@ class ACM:
                         print("rights: " +  ACM.rights[k].text + " " + str(ACM.rights[k].rights))
                         break
 
-    def read(): #prints all rights for subjects and objects
+    def readAll(): #prints all rights for subjects and objects
         print("Rights are defined as 'subject name' concatinated with 'object name' and printed with their rights.")
         for i in range(len(ACM.rights)):
             print(ACM.rights[i].text + " " + str(ACM.rights[i].rights))
+
+    def read(subName, objName):
+        
+        for i in range(len(ACM.subjects)): #finds name of subject
+            if ACM.subjects[i].name == subName:
+                sub = ACM.subjects[i].name
+                break
+
+        for j in range(len(ACM.objects)): #finds name of object
+            if ACM.objects[j].name ==  objName:
+                obj = ACM.objects[j].name
+                break
+            
+        for k in range(len(ACM.rights)):
+            if ACM.rights[k].name == subName + objName: #if name is found
+                print("Reading:\nSubject: " + sub + ", Object: " + obj + " ==>\nRights: " + str(ACM.rights[k].rights))
+                return str(ACM.rights[k].rights)
+
+    def authorize(subName, objName):
+        
+        for i in range(len(ACM.subjects)): #finds name of subject
+            if ACM.subjects[i].name == subName:
+                sub = ACM.subjects[i].name
+                break
+
+        for j in range(len(ACM.objects)): #finds name of object
+            if ACM.objects[j].name ==  objName:
+                obj = ACM.objects[j].name
+                break
+            
+        for k in range(len(ACM.rights)):
+            if ACM.rights[k].name == subName + objName: #if name is found
+                return str(ACM.rights[k].rights)
+            
    
     def delRecursive(name): #checks if that subject, or object exist and deletes it 
         for m in range(len(ACM.rights)):
@@ -230,14 +264,16 @@ def main():
     ACM.grant("Sub4", "Sub2", "control")
 
 
-    ACM.removeRight("Sub1", "Obj1", "control")
-    ACM.removeRight("Sub1", "Obj1", "own")
-    ACM.removeRight("Sub3", "Obj4", "read")
+    #ACM.removeRight("Sub1", "Obj1", "control")
+    #ACM.removeRight("Sub1", "Obj1", "own")
+    #ACM.removeRight("Sub3", "Obj4", "read")
 
     ACM.transfer("Sub3", "Obj4", "read*", "Sub1", "Obj2", "read")
-    ACM.delObj("Obj1")
+    #ACM.delObj("Obj1")
     #ACM.delSub("Sub3")
-    ACM.delSub("Sub3")
+    #ACM.delSub("Sub3")
+
+    ACM.read("Sub1", "Obj1")
 
     
 
